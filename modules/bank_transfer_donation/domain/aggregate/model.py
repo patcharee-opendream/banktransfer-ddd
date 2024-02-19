@@ -1,6 +1,10 @@
 from enum import Enum
+from modules.bank_transfer_donation.domain.aggregate.id import (
+    BankTransferDonationId,
+    BankTransferTransactionId,
+)
 from modules.donee.domain.value_objects import Donee
-
+from dataclasses import dataclass
 from modules.donor.domain.value_objects import Donor
 from modules.note.domain.aggregate.model import Note
 from modules.shared.domain.money import Money
@@ -13,50 +17,68 @@ class BankTransferStatus(Enum):
     PAID = "paid"
 
 
+@dataclass
 class BankTransferTransaction:
-    def __init__(
-        self,
-        id: int,
-        transaction_id: str,
-        date: datetime,
-        amount: Money,
-        note_id: int,
-    ):
-        self.id = id
-        self.transaction_id = transaction_id
-        self.date = date
-        self.amount = amount
-        self.note_id = note_id
+    id: BankTransferTransactionId
+    transaction_id: str
+    date: datetime
+    amount: Money
+    note_id: int
+
+    @staticmethod
+    def new_transaction(
+        transaction_id: str, date: datetime, amount: Money, note_id: int
+    ) -> "BankTransferTransaction":
+        transaction = BankTransferTransaction(
+            id=BankTransferTransactionId.next_id(),
+            transaction_id=transaction_id,
+            date=date,
+            amount=amount,
+            note_id=note_id,
+        )
+        return transaction
 
 
+@dataclass
 class BankTransferDonation:
-    def __init__(
-        self,
-        id: int,
+    id: BankTransferDonationId
+    donation_number: str
+    donor: Donor
+    donee: Donee
+    expected_amount: Money
+    notes: list[Note]
+    transactions: list[BankTransferTransaction]
+    status: BankTransferStatus
+    form_data: dict
+    meta: dict
+
+    @staticmethod
+    def new_donation(
         donation_number: str,
         donor: Donor,
         donee: Donee,
         expected_amount: Money,
-    ):
-        self.id = id
-        self.donation_number = donation_number
-        self.donor = donor
-        self.donee = donee
-        self.expected_amount = expected_amount
-
-        self.notes = []
-        self.transactions: list[BankTransferTransaction] = []
-        self.status = BankTransferStatus.NEW
-        self.form_data = {}
-        self.meta = {}
+    ) -> "BankTransferDonation":
+        donation = BankTransferDonation(
+            id=BankTransferDonationId.next_id(),
+            donation_number=donation_number,
+            donor=donor,
+            donee=donee,
+            expected_amount=expected_amount,
+            notes=[],
+            transactions=[],
+            status=BankTransferStatus.NEW,
+            form_data={},
+            meta={},
+        )
+        return donation
 
     def add_note(self, note, amount, date):
         if amount == 0:
             raise ValueError("Amount must be greater than 0")
 
         if not self.transactions:
-            note = Note(
-                id=1,
+            note = Note.new_note(
                 note=note,
                 amount=amount,
                 date=date,
@@ -79,8 +101,7 @@ class BankTransferDonation:
             raise ValueError("Note id does not exist")
 
         # create transaction
-        transaction = BankTransferTransaction(
-            id=1,
+        transaction = BankTransferTransaction.new_transaction(
             transaction_id=transaction_id,
             date=date,
             amount=amount,

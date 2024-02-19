@@ -32,8 +32,7 @@ def test_add_notes_to_bank_transfer_donation(my_donor):
         meta={},
     )
 
-    donation = BankTransferDonation(
-        id=1,
+    donation = BankTransferDonation.new_donation(
         donation_number="123",
         donor=my_donor,
         donee=donee,
@@ -59,8 +58,7 @@ def test_approve_bank_transfer_donation(my_donor):
         meta={},
     )
 
-    donation = BankTransferDonation(
-        id=1,
+    donation = BankTransferDonation.new_donation(
         donation_number="123",
         donor=my_donor,
         donee=donee,
