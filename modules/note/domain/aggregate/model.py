@@ -4,8 +4,9 @@ from datetime import datetime
 from modules.shared.domain.money import Money
 
 
-@dataclass
 class Note:
-    note: str
-    amount: Money
-    date: datetime
+    def __init__(self, id: int, note: str, amount: Money, date: datetime):
+        self.id = id
+        self.note = note
+        self.amount = amount
+        self.date = date

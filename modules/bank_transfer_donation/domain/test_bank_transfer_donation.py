@@ -51,5 +51,30 @@ def test_add_notes_to_bank_transfer_donation(my_donor):
     assert len(donation.notes) == 1
 
 
-def test_approve_bank_transfer_donation():
-    pass
+def test_approve_bank_transfer_donation(my_donor):
+    donee = Donee(
+        donee_type=DoneeType.PROJECT,
+        ref_id="123",
+        name="test",
+        meta={},
+    )
+
+    donation = BankTransferDonation(
+        id=1,
+        donation_number="123",
+        donor=my_donor,
+        donee=donee,
+        expected_amount=None,
+    )
+
+    donation.add_note("test", Money(amount=100, currency="USD"), datetime.now())
+
+    donation.confirm_transaction(
+        transaction_id="123",
+        date=datetime.now(),
+        amount=Money(amount=100, currency="USD"),
+        note_id=donation.notes[0].id,
+    )
+
+    assert donation.status == BankTransferStatus.PAID
+    assert len(donation.transactions) == 1
