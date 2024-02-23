@@ -12,9 +12,9 @@ from datetime import datetime
 
 
 class BankTransferStatus(Enum):
-    NEW = "new"
-    PENDING = "pending"
-    PAID = "paid"
+    NEW = "NEW"
+    PENDING = "PENDING"
+    PAID = "PAID"
 
 
 @dataclass

@@ -7,7 +7,7 @@ from modules.donor.domain.value_objects import Donor, DonorType
 @pytest.fixture
 def my_donor():
     return Donor(
-        donor_type=DonorType.DONOR_TYPE_INDIVIDUAL,
+        donor_type=DonorType.PER,
         member_id="123",
         email="test@gmail.com",
         phone="1234567890",
@@ -21,7 +21,7 @@ def my_donor():
 def test_donor(my_donor):
     donor_1 = my_donor
     donor_2 = Donor(
-        donor_type=DonorType.DONOR_TYPE_INDIVIDUAL,
+        donor_type=DonorType.PER,
         member_id="123",
         email="test@gmail.com",
         phone="1234567890",

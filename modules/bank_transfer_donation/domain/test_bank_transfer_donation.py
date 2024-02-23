@@ -13,7 +13,7 @@ from modules.shared.domain.money import Money
 @pytest.fixture
 def my_donor():
     return Donor(
-        donor_type=DonorType.DONOR_TYPE_INDIVIDUAL,
+        donor_type=DonorType.PER,
         member_id="123",
         email="test@gmail.com",
         phone="1234567890",
@@ -26,7 +26,7 @@ def my_donor():
 
 def test_add_notes_to_bank_transfer_donation(my_donor):
     donee = Donee(
-        donee_type=DoneeType.PROJECT,
+        donee_type=DoneeType.PROJ,
         ref_id="123",
         name="test",
         meta={},
@@ -52,7 +52,7 @@ def test_add_notes_to_bank_transfer_donation(my_donor):
 
 def test_approve_bank_transfer_donation(my_donor):
     donee = Donee(
-        donee_type=DoneeType.PROJECT,
+        donee_type=DoneeType.PROJ,
         ref_id="123",
         name="test",
         meta={},

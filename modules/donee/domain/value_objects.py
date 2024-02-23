@@ -3,11 +3,11 @@ from dataclasses import dataclass
 
 
 class DoneeType(Enum):
-    PROJECT = "PROJ"
-    FUNDRAISER = "FUND"
+    PROJ = "PROJ"
+    FUND = "FUND"
     CART = "CART"
-    CAMPAIGNER = "CAMP"
-    MICROSITE = "MICS"
+    CAMP = "CAMP"
+    MICS = "MICS"
 
 
 # create donor value object

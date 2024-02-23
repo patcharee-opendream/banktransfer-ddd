@@ -3,8 +3,11 @@ from dataclasses import dataclass
 
 
 class DonorType(Enum):
-    DONOR_TYPE_INDIVIDUAL = "PER"
-    DONOR_TYPE_ORGANIZATION = "ORG"
+    PER = "PER"
+    ORG = "ORG"
+
+    def __composite_values__(self):
+        return (self.value,)
 
 
 # create donor value object
